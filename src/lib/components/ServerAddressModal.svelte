@@ -10,6 +10,7 @@
   let modalTitleId = "settingsModal";
   let settingsModal = false;
   let serverAddress = null;
+  let namespace = null;
   let headers = null;
   let statusMessage = "";
 
@@ -29,20 +30,25 @@
     }
     $serverSettings.address = serverAddress;
     localStorage.setItem("address", serverAddress);
+    $serverSettings.namespace = namespace;
+    localStorage.setItem("namespace", namespace);
     settingsModal = false;
   }
 
   function clearSettings() {
     tabAsSpaces = true;
     serverAddress = null;
+    namespace = null;
     headers = null;
     serverSettings.set({
       address: null,
+      namespace: null,
       status: "disconnected",
       options: {},
       id: undefined,
     });
     localStorage.removeItem("address");
+    localStorage.removeItem("namespace");
     settingsModal = false;
   }
 
@@ -64,6 +70,7 @@
   }
   onMount(() => {
     serverAddress = localStorage.getItem("address");
+    namespace = localStorage.getItem("namespace");
   });
 </script>
 
@@ -72,8 +79,8 @@
   class="pr-2 w-full text-center text-clip overflow-hidden"
   on:click={() => (settingsModal = !settingsModal)}
 >
-  <span class="sr-only">{serverAddress ? "Current URL: " + serverAddress : "Set URL"}</span>
-  <span aria-hidden="true">{serverAddress || "Set URL"}</span>
+  <span class="sr-only">{serverAddress ? "Current URL: " + (namespace ? serverAddress + "/" + namespace : serverAddress) : "Set URL"}</span>
+  <span aria-hidden="true">{(namespace ? serverAddress + "/" + namespace : serverAddress) || "Set URL"}</span>
 </button>
 
 <Modal
@@ -108,6 +115,22 @@
           placeholder="example: http://localhost:3000"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
           required
+        />
+      </div>
+
+      <div>
+        <label
+                for="namespace"
+                class="block mb-2 text-sm font-medium text-gray-300 text-left"
+        >Socket.IO Namespace</label>
+
+        <input
+          type="text"
+          name="namespace"
+          id="namespace"
+          bind:value={namespace}
+          placeholder="example: events"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
         />
       </div>
       <div>

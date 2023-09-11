@@ -17,13 +17,13 @@ let socket: Socket | null = null;
 export const toggleConnection = () => {
   try {
     const server = get(serverSettings);
-    const {address,status,options} = get(serverSettings);
+    const {address, namespace, status, options} = get(serverSettings);
 
     if (status == "disconnected" ) {
       serverSettings.set({...server, status: 'connecting'})
       logger('connecting');
 
-      socket = io(address, options);
+      socket = io(address + (namespace ? "/" + namespace : ""), options);
       socket.connect();
       
       socket.on("connect", () => {

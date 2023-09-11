@@ -39,6 +39,7 @@
 
   onMount(() => {
     $serverSettings.address = localStorage.getItem("address") || null;
+    $serverSettings.namespace = localStorage.getItem("namespace") || null;
     const historyFromStorage = readItems<RequestType>("history");
     const listenersFromStorage = readItems<ListenerType>("listeners");
     historyFromStorage && requestHistory.set(historyFromStorage);
